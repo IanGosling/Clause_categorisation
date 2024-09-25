@@ -107,28 +107,32 @@ https://www.linkedin.com/in/ian-gosling/
 
 
 # Model Card
-
-See the [example Google model cards](https://modelcards.withgoogle.com/model-reports) for inspiration. 
+The purpose of this project was to experiment with different models and types of text encoding  for text classification in the legal context.<br>
+This was trained and tested on a ten clause subset of a kaggle dataset. The project considered three different models:
+* [K-Nearest Neighbour](https://scikit-learn.org/dev/modules/generated/sklearn.neighbors.KNeighborsClassifier.html) using [TFID Vectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html)
+* [Decision Tree](https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html) and [Random Forest](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier) using [Doc2Vec](https://radimrehurek.com/gensim/auto_examples/tutorials/run_doc2vec_lee.html)
+* [Simple Multi-Layer Perceptron (MLP)](http://neuralnetworksanddeeplearning.com/chap1.html) built in [Tensorflow Keras](https://www.tensorflow.org/guide/keras) using [TFID Vectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html)
 
 ## Model Description
 
-**Input:** Describe the inputs of your model 
+**Input:** Paragraphs of legal clauses of ten different clause types.  These were then put through text preprocessing.    
 
-**Output:** Describe the output(s) of your model
+**Output:** A classification prediction for clause type for ten types of legal clauses
 
-**Model Architecture:** Describe the model architecture you’ve used
+**Model Architecture:** The most successful model was a simple multi-layer perceptron with 2 hidden layers of 128 units and Relu.  The output layer was softmax.
 
 ## Performance
-
+The model classified correctly in 88% of cases.  Accuracy was the primary measure for optimisation.   
 Give a summary graph or metrics of how the model performs. Remember to include how you are measuring the performance and what data you analysed it on. 
 
 ## Limitations
-
-Outline the limitations of your model.
+The model works poorly on clauses of less than 10 words after text pre-processing.
+Performance drops between closely related clause types.
+The model only works on legal clauses of these ten types.  There are many more types of legal clauses.
+This model is only intended for learning and experimentation not deployment.
 
 ## Trade-offs
-
-Outline any trade-offs of your model, such as any circumstances where the model exhibits performance issues. 
+The model works poorly on clauses of less than 10 words after text pre-processing. 
 
 # Datasheet
 
