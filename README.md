@@ -34,7 +34,7 @@ This relative scarcity of data and the close inter-relations of some of the cate
 Word counts are prior to text pre-processing.
 The text of the clauses was preprocessed to:
 * Remove the Clause title (Label) from the main body of the clause
-* Removing Special Characters, low casing, removing punctuation, lemmatization and removing stop words.  This was done using the [Gensim Library](https://radimrehurek.com/gensim/parsing/preprocessing.html).
+* Removing special characters, low casing, removing punctuation, lemmatization and removing stop words.  This was done using the [Gensim Library](https://radimrehurek.com/gensim/parsing/preprocessing.html).
 The data was then shuffled and split into Train and Test sets.  The same train (75%) and test sets (25%) were used by each model to avoid any unintentional bias.  
 For the MLP labels were converted to integers. 
 
@@ -47,12 +47,37 @@ I considered different models of vectorisation having reviewed this paper: ['Sys
 <br>All models were trained with k-fold validation (k=5) to mitigate the relatively small data set. 
 
 ## HYPERPARAMETER OPTIMISATION
-Description of which hyperparameters you have and how you chose to optimise them. 
+I used [the Optuna Library](https://optuna.org/) for hyperparameter optimisation.  
+This enables you to run multiple trials using a range of values for each hyperparameter. The library provides a model which after an initial random phase uses Bayesian optimisation to narrow down to the best combination.  
+For the simpler models I ran several hundred trials for the MLP I ran a hundred trials.  
+This worked very well producing 5-10% uplifts in performance for all of the models with the exception of the MLP.  Here my starting hyperparameters were recommended by Google's help on the subject and their long experience showed.        
+#### Simple - K-nearest neighbour/TFID Vectoriser Hyperparameters
+'max_df': 0.693372321103527, 'min_df': 0.08413292078757699, 'max_features': 332, 'stop_words': None, 'ngram_range': (1, 2), 'n_neighbors': 7, 'weights': 'distance'
+#### More Complex - Decision Tree/ Doc2Vec Hyperparameters
+'criterion': 'entropy', 'splitter': 'best', 'max depth': 22, 'min samples split': 19, 'min samples leaf': 10, 'min weight fraction leaf': 0.0006860122535069519, 'max_features': None, 'max leaf nodes': 27, 'min impurity decrease': 0.0004949977802429552, 'class weight': 'balanced', 'ccp alpha': 0.00516684693813014
+#### More Complex - Random Forest/ Doc2Vec Hyperparameters
+'criterion': 'log_loss', 'max depth': 18, 'min samples split': 17, 'min samples leaf': 4, 'min weight fraction leaf': 0.0007842045594534525, 'max_features': 'sqrt', 'max leaf nodes': 81, 'min impurity decrease': 0.0002612096689857516, 'class weight': 'balanced_subsample', 'ccp alpha': 0.003790698945688128
+#### NN - Simple Multi-Layer Perceptron / TFID Vectoriser Hyperparameters
+learning_rate = 0.0018962810428611815, layers = 2, units = 128, dropout_rate = 0.47693769062401753, N_GRAM_RANGE = (2, 4), TOP_K= 34293, MIN_DOCUMENT_FREQUENCY= 2
 
 ## RESULTS
-Overall accuracy score summary <br>
-A summary of your results and what you can learn from your model 
+| Model                                           | Accuracy |
+|-------------------------------------------------|----------|
+| Simple - K-nearest neighbour/TFID Vectoriser    | 83%      |
+| More Complex - Decision Tree/ Doc2Vec           | 49%      |
+| More Complex - Random Forest/ Doc2Vec           | 71%      |
+| NN - Simple Multi-Layer Perceptron / TFID Vectoriser | 88% |
 
+Of the three models the clear winner was Simple MLP.  There are two unanswered questions for a follow stage to this project:
+* Would Decision Tree or Random Forest would perform better with TFIDF Vectoriser?
+* How did the preprocessing of the text effect the results?<br>
+
+### Further Analysis of Simple MLP Model performance
+Looking at the [Classification Report](https://scikit-learn.org/1.5/modules/generated/sklearn.metrics.classification_report.html) and the [Confusion Matrix](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html) it is clear that there is mislabelling taking place between closely related clause types.
+For example 'indemnification' and 'indemnification and contribution', and separately, 'partipations', 'capitalisation' and 'contribution'.
+I think this is an area where pre-processing may have effected the results removing some of the nuance from closely related clause types.
+
+#### Classification Report
 |                               | Precision | Recall | F1-Score | Support |
 |-------------------------------|----------:|-------:|---------:|--------:|
 | Arbitration                  |      1.00 |   1.00 |     1.00 |   62.00 |
@@ -69,12 +94,13 @@ A summary of your results and what you can learn from your model
 | Macro Avg                     |      0.88 |   0.88 |     0.88 |  538.00 |
 | Weighted Avg                  |      0.89 |   0.88 |     0.88 |  538.00 |
 
-The confusion Matrix
+#### Confusion Matrix
 ![Confusion Matrix](Confusion_matrix.png)
 
-![Accuracy by word count](Accuracy_by_word_count.png)
-
-
+#### Effect of word count on Accuracy
+One of the questions from looking at the raw data is some of the clauses were just a few words long.
+Unsurprisingly the sparcity of the data does have an effect but at a surprisingly low level.  Model performance does not drop off significantly until there are ten or less words after preprocessing. 
+![Accuracy by word count after preprocessing](Accuracy_by_word_count.png)
 
 ## CONTACT DETAILS
 https://www.linkedin.com/in/ian-gosling/
@@ -132,7 +158,6 @@ The original dataset is distributed via Kaggle  [here](https://www.kaggle.com/da
 The data was collected in 2021.
 
 ## Preprocessing/cleaning/labelling
-
 The text of the clauses was preprocessed to:
 * Remove the Clause title (Label) from the main body of the clause
 * Removing Special Characters, low casing, removing punctuation, lemmatization and removing stop words.  This was done using the [Gensim Library](https://radimrehurek.com/gensim/parsing/preprocessing.html).
@@ -141,8 +166,8 @@ For the MLP labels were converted to integers.
 The raw csv files are included in this repositary.
 
 ## Uses
-- Educational use only
-- No commercial use 
+- Educational and experimental use only
+- No commercial use, as the exact commercial provenance of the data is uncertain
 - https://creativecommons.org/publicdomain/zero/1.0/
 
 ## Distribution
