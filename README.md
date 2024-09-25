@@ -50,10 +50,31 @@ I considered different models of vectorisation having reviewed this paper: ['Sys
 Description of which hyperparameters you have and how you chose to optimise them. 
 
 ## RESULTS
+Overall accuracy score summary <br>
 A summary of your results and what you can learn from your model 
 
-You can include images of plots using the code below:
-![Screenshot](image.png)
+|                               | Precision | Recall | F1-Score | Support |
+|-------------------------------|----------:|-------:|---------:|--------:|
+| Arbitration                  |      1.00 |   1.00 |     1.00 |   62.00 |
+| Capitalization               |      1.00 |   0.98 |     0.99 |   54.00 |
+| Confidential-Information     |      0.71 |   0.79 |     0.75 |   58.00 |
+| Confidentiality              |      0.78 |   0.74 |     0.76 |   61.00 |
+| Contribution                 |      1.00 |   0.98 |     0.99 |   48.00 |
+| Indemnification              |      0.88 |   0.64 |     0.75 |   59.00 |
+| Indemnification-and-Contribution |    0.80 |   0.88 |     0.83 |   40.00 |
+| Indemnification-by-the-Company   |    0.66 |   0.80 |     0.73 |   46.00 |
+| Participations               |      1.00 |   1.00 |     1.00 |   51.00 |
+| Payment-of-Expenses          |      1.00 |   1.00 |     1.00 |   59.00 |
+| Accuracy                      |      0.88 |   0.88 |     0.88 |    0.88 |
+| Macro Avg                     |      0.88 |   0.88 |     0.88 |  538.00 |
+| Weighted Avg                  |      0.89 |   0.88 |     0.88 |  538.00 |
+
+The confusion Matrix
+![Confusion Matrix](Confusion_matrix.png)
+
+![Accuracy by word count](Accuracy_by_word_count.png)
+
+
 
 ## CONTACT DETAILS
 https://www.linkedin.com/in/ian-gosling/
@@ -125,7 +146,7 @@ The raw csv files are included in this repositary.
 - https://creativecommons.org/publicdomain/zero/1.0/
 
 ## Distribution
-The subset of data used for these models is distribted in this Github repository.
+The subset of data used for these models is distributed in this Github repository.
  
 ## Maintenance
 Data set is not maintained.
